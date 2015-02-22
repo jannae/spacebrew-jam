@@ -10,8 +10,9 @@ var user;
 
 // Spacebrew Object
 var sb,
-    // server = 'ec2-54-152-43-9.compute-1.amazonaws.com',
-    app_name = 'Draw Canvas';
+    server = '52.1.15.214',
+    app_name = 'Draw Canvas',
+    app_desc = 'Desktop Canvas for Touch Draw Application';
 
 /**
  * setup Configure spacebrew connection and adds the mousedown listener.
@@ -19,11 +20,11 @@ var sb,
 function setup (){
 
     // create spacebrew client object
-    sb = new Spacebrew.Client();
+    sb = new Spacebrew.Client(server);
 
     // set the base description
     sb.name(app_name);
-    sb.description("Desktop Canvas for Touch Draw Application");
+    sb.description(app_desc);
 
     // configure the publication and subscription feeds
     sb.addSubscribe( "touch", "touches" );

@@ -2,7 +2,7 @@ $(window).on("load", setup);
 
 // Spacebrew Object
 var sb,
-    // server = 'ec2-54-152-43-9.compute-1.amazonaws.com',
+    server = '52.1.15.214',
     app_name = 'Draw Mobile',
     app_desc = 'Mobile Web App for Touch Draw Application';
 
@@ -39,7 +39,7 @@ function setup (){
         };
 
     // create spacebrew client object
-    sb = new Spacebrew.Client();
+    sb = new Spacebrew.Client(server);
 
     // set the base description
     sb.name(app_name);
