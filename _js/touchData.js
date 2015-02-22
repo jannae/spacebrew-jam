@@ -2,7 +2,9 @@ $(window).on("load", setup);
 
 // Spacebrew Object
 var sb,
-    app_name = 'Touch Draw Canvas Publisher';
+    // server = 'ec2-54-152-43-9.compute-1.amazonaws.com',
+    app_name = 'Draw Mobile',
+    app_desc = 'Mobile Web App for Touch Draw Application';
 
 var cnvW = window.innerWidth;
 var cnvH = window.innerHeight - $('#disconnect').height();
@@ -41,14 +43,10 @@ function setup (){
 
     // set the base description
     sb.name(app_name);
-    sb.description("Mobile Web App for Touch Draw Application");
+    sb.description(app_desc);
 
     // configure the publication and subscription feeds
     sb.addPublish( "touch", "touches", touchData );
-
-    // override Spacebrew events - this is how you catch events coming from Spacebrew
-    // sb.onCustomMessage = onCustomMessage;
-    // sb.onOpen = onOpen;
 
     // connect to spacbrew
     sb.connect();
@@ -59,50 +57,12 @@ function setup (){
         el.addEventListener("touchcancel", handleCancel, false);
         el.addEventListener("touchleave", handleEnd, false);
         el.addEventListener("touchmove", handleMove, false);
-    log("initialized.");
+    // log("initialized.");
 }
-
-// $(document).ready(function() {
-
-
-//     $('#broadcast').hide();
-
-//     $('#sendname').click(function() {
-//         startup();
-
-//         $('#signin').hide();
-//         $('#broadcast').show();
-
-//         var name = String($('#name').val());
-//         $('#name').val('');
-//         userdata = {
-//             'ss': sizespd,
-//             'r': r,
-//             'g': g,
-//             'b': b,
-//             'w': cnvW,
-//             'h': cnvH
-//         };
-
-//         $('#header h2').html(name).css('color', 'rgb(' + parseInt(r * 255) + ',' + parseInt(g * 255) + ',' + parseInt(b * 255) + ')');
-
-//     });
-
-//     $('#sendquit').click(function() {
-//         sockexit();
-//         window.location.reload(true);
-//     });
-// });
-
-
-// function startup() {
-
-
-// }
 
 function handleStart(evt) {
     evt.preventDefault();
-    log("touchstart.");
+    // log("touchstart.");
     var el = document.getElementsByTagName("canvas")[0];
     var ctx = el.getContext("2d");
     var touches = evt.changedTouches;
@@ -115,7 +75,7 @@ function handleStart(evt) {
         ctx.arc(touches[i].pageX, touches[i].pageY, 4, 0, 2 * Math.PI, false); // a circle at the start
         ctx.fillStyle = color;
         ctx.fill();
-        log("touchstart:" + i + ".");
+        // log("touchstart:" + i + ".");
         touchData[touches[i].identifier] = {
             'startX': touches[i].pageX,
             'startY': touches[i].pageY
@@ -136,18 +96,18 @@ function handleMove(evt) {
         var idx = ongoingTouchIndexById(touches[i].identifier);
 
         if (idx >= 0) {
-            log("continuing touch " + idx);
+            // log("continuing touch " + idx);
             ctx.beginPath();
-            log("ctx.moveTo(" + ongoingTouches[idx].pageX + ", " + ongoingTouches[idx].pageY + ");");
+            // log("ctx.moveTo(" + ongoingTouches[idx].pageX + ", " + ongoingTouches[idx].pageY + ");");
             ctx.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
-            log("ctx.lineTo(" + touches[i].pageX + ", " + touches[i].pageY + ");");
+            // log("ctx.lineTo(" + touches[i].pageX + ", " + touches[i].pageY + ");");
             ctx.lineTo(touches[i].pageX, touches[i].pageY);
             ctx.lineWidth = 4;
             ctx.strokeStyle = color;
             ctx.stroke();
 
             ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record
-            log(".");
+            // log(".");
 
             $.extend(touchData[touches[i].identifier], {
                 'moveToX': ongoingTouches[idx].pageX,
@@ -167,7 +127,7 @@ function handleMove(evt) {
 
 function handleEnd(evt) {
     evt.preventDefault();
-    log("touchend/touchleave.");
+    // log("touchend/touchleave.");
     var el = document.getElementsByTagName("canvas")[0];
     var ctx = el.getContext("2d");
     var touches = evt.changedTouches;
@@ -186,14 +146,14 @@ function handleEnd(evt) {
             ongoingTouches.splice(idx, 1); // remove it; we're done
             delete touchData[touches[i].identifier];
         } else {
-            log("can't figure out which touch to end");
+            // log("can't figure out which touch to end");
         }
     }
 }
 
 function handleCancel(evt) {
     evt.preventDefault();
-    log("touchcancel.");
+    // log("touchcancel.");
     var touches = evt.changedTouches;
 
     for (var i = 0; i < touches.length; i++) {
@@ -210,7 +170,7 @@ function colorForTouch(touch) {
     g = g.toString(16); // make it a hex digit
     b = b.toString(16); // make it a hex digit
     var color = "#" + r + g + b;
-    log("color for touch with identifier " + touch.identifier + " = " + color);
+    // log("color for touch with identifier " + touch.identifier + " = " + color);
     return color;
 }
 

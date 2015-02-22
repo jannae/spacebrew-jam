@@ -10,7 +10,8 @@ var user;
 
 // Spacebrew Object
 var sb,
-    app_name = "Draw Canvas Subscriber";
+    // server = 'ec2-54-152-43-9.compute-1.amazonaws.com',
+    app_name = 'Draw Canvas';
 
 /**
  * setup Configure spacebrew connection and adds the mousedown listener.
@@ -54,19 +55,8 @@ function onCustomMessage( name, value, type ){
             }
         });
     }
-    if (moveX && moveY) particle(moveX,moveY);
+    if (moveX && moveY) particles(moveX,moveY);
 }
-
-// socket.on('update', function(session, username, userdata, data) {
-//     if (data !== null) {
-//         $.each(data, function(key, value) {
-//             console.log(key+', '+value);
-//             moveX = mapToRange(value.moveToX,0,userdata.w,0,width);
-//             moveY = mapToRange(value.moveToY,0,userdata.h,0,height);
-//         });
-//     }
-//     if (moveX && moveY) particle(moveX,moveY);
-// });
 
 function cleanStr(str) {
     if (str !== null) {
@@ -80,7 +70,9 @@ function cleanStr(str) {
     }
 }
 
-var i = 0;
+var i = 0,
+    r = 200,
+    τ = 2 * Math.PI;
 
 var svg = d3.select("#run").append("svg")
     .attr("width", width)
@@ -90,7 +82,15 @@ svg.append("rect")
     .attr("width", width)
     .attr("height", height);
 
-function particle(mx,my) {
+// var canvas = d3.select("#run").append("canvas")
+//     .attr("width", width)
+//     .attr("height", height);
+
+// var context = canvas.node().getContext("2d");
+//     context.globalCompositeOperation = "lighter";
+//     context.lineWidth = 2;
+
+function particles(mx,my) {
     svg.insert("circle", "rect")
         .attr("cx", mx)
         .attr("cy", my)
@@ -103,6 +103,53 @@ function particle(mx,my) {
         .attr("r", 100)
         .style("stroke-opacity", 1e-6)
         .remove();
+}
+
+function lines(){
+
+}
+
+function circles(mx, my) {
+
+    var z = d3.hsl(++i % 360, 1, 0.5).rgb(),
+        c = "rgba(" + z.r + "," + z.g + "," + z.b + ",";
+
+    svg.insert("circle", "rect")
+        .attr("cx", mx)
+        .attr("cy", my)
+        .transition()
+        .duration(2000)
+        .ease(Math.sqrt)
+        .tween("circle", function() {
+            return function(t) {
+              context.strokeStyle = c + (1 - t) + ")";
+              context.beginPath();
+              context.arc(mx, my, r * t, 0, τ);
+              context.stroke();
+            };
+        })
+        .style("stroke-opacity", 1e-6)
+        .remove();
+
+    // d3.timer(function() {
+    //     context.clearRect(0, 0, width, height);
+    //     var z = d3.hsl(++i % 360, 1, 0.5).rgb(),
+    //         c = "rgba(" + z.r + "," + z.g + "," + z.b + ",";
+    //     // var x = x0 += (x1 - x0) * 0.1,
+    //     //   y = y0 += (y1 - y0) * 0.1;
+
+    //     d3.select({}).transition()
+    //       .duration(2000)
+    //       .ease(Math.sqrt)
+    //       .tween("circle", function() {
+    //         return function(t) {
+    //           context.strokeStyle = c + (1 - t) + ")";
+    //           context.beginPath();
+    //           context.arc(mx, my, r * t, 0, τ);
+    //           context.stroke();
+    //         };
+    //       });
+    // });
 }
 
 function mapToRange(value, srcLow, srcHigh, dstLow, dstHigh){
