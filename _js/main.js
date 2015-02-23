@@ -10,7 +10,7 @@ var user;
 
 // Spacebrew Object
 var sb,
-    server = '52.1.15.214',
+    server = 'brew.jann.ae',
     app_name = 'Draw Canvas',
     app_desc = 'Desktop Canvas for Touch Draw Application';
 

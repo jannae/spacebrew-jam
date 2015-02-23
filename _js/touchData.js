@@ -2,7 +2,7 @@ $(window).on("load", setup);
 
 // Spacebrew Object
 var sb,
-    server = '52.1.15.214',
+    server = 'brew.jann.ae',
     app_name = 'Draw Mobile',
     app_desc = 'Mobile Web App for Touch Draw Application';
 
